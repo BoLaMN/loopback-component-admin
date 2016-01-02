@@ -1,0 +1,5 @@
+<md-switch ng-model="value" id="{{ :: name }}" name="{{ :: name }}" aria-label="{{ :: name}}" class="md-primary admin-switch">
+  <span ng-class="{ 'barred-text': !value }">
+    {{ :: property.label | modelToHuman }} <span ng-if="property.validation.required">*</span>
+  </span>
+</md-switch>

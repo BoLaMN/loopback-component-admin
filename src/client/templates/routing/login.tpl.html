@@ -1,0 +1,21 @@
+<form ng-submit="loginController.login(credentials)">
+    <md-input-container flex>
+        <label>{{:: 'username' | text }}</label>
+        <input type="text" ng-model="credentials.username">
+    </md-input-container>
+
+    <md-input-container flex>
+        <label>{{:: 'password' | text }}</label>
+        <input type="password" ng-model="credentials.password">
+        <div class="forgot-password" ng-click="loginController.showPasswordResetModal($event)">{{:: 'forgot' | text }}</div>
+    </md-input-container>
+
+    <md-container flex layout="row">
+        <md-checkbox ng-model="credentials.rememberMe" class="md-primary">{{:: 'rememberMe' | text }}</md-checkbox>
+        <span flex></span>
+        <md-button type="submit" class="md-primary md-raised">{{:: 'login' | text }}</md-button>
+    </md-container>
+</form>
+
+<p>{{:: 'noAccount' | text }} <a ui-sref="register">{{:: 'registerHere' | text }}</a> {{:: 'orLoginWith' | text }}</p>
+<cms-social-buttons></cms-social-buttons>

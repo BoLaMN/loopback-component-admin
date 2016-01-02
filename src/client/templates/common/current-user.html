@@ -1,0 +1,46 @@
+<div class="current-user">
+    <div ui-sref="dashboard" class="avatar">
+        <img class="img-responsive" ng-src="{{ :: $root.getAvatar(ctrl.auth.currentUserData) }}"/>
+    </div>
+
+    <md-menu>
+      <md-button aria-label="Open user menu" class="md-primary" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
+        {{ :: ctrl.auth.currentUserData.username }}
+      </md-button>
+
+      <md-menu-content width="4">
+
+        <md-menu-item>
+          <md-button ng-click="ctrl.showAccountSettingsModal($event, 'username')">
+            <md-icon md-font-set="material-icons">sort</md-icon>
+            {{:: 'editUsername' | text }}
+          </md-button>
+        </md-menu-item>
+
+        <md-menu-item>
+          <md-button ng-click="ctrl.showAccountSettingsModal($event, 'avatar')">
+            <md-icon md-font-set="material-icons">sort</md-icon>
+            {{:: 'changeAvatar' | text }}
+          </md-button>
+        </md-menu-item>
+
+        <md-menu-divider></md-menu-divider>
+
+        <md-menu-item>
+          <md-button ng-click="ctrl.showAccountSettingsModal($event)">
+            <md-icon md-font-set="material-icons">sort</md-icon>
+            {{:: 'accountSettings' | text }}
+          </md-button>
+        </md-menu-item>
+
+        <md-menu-item>
+          <md-button ui-sref="logout">
+            <md-icon md-font-set="material-icons">sort</md-icon>
+            {{:: 'logOut' | text }}
+          </md-button>
+        </md-menu-item>
+
+      </md-menu-content>
+    </md-menu>
+
+</div>

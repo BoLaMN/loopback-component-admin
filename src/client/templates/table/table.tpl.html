@@ -1,0 +1,78 @@
+<md-data-table-toolbar class="md-primary-default background" ng-hide="table.selected.length || table.filter.show">
+    <a ui-sref="list({ model: table.model.name })">
+        <h2 class="md-title md-primary-default background">{{ :: table.model.label | modelToHuman }}</h2>
+    </a>
+
+    <div flex></div>
+
+    <md-button class="md-icon-button" ng-click="table.filter.show = true">
+        <i class="material-icons md-dark">search</i>
+    </md-button>
+
+    <md-button class="md-icon-button" ng-click="table.showRowModal('create', null, $event)">
+        <i class="material-icons md-dark">add</i>
+    </md-button>
+</md-data-table-toolbar>
+
+<md-data-table-toolbar class="md-warn-default background" ng-show="table.selected.length">
+    <div>
+        <h2 class="md-title">{{table.selected.length}} {{table.selected.length > 1 ? 'items' : 'item'}} selected</h2>
+    </div>
+
+    <div flex></div>
+
+    <md-button class="md-icon-button" ng-click="table.deleteRows(table.selected, $event)">
+        <i class="material-icons md-dark">delete</i>
+    </md-button>
+</md-data-table-toolbar>
+
+<md-data-table-toolbar ng-show="table.filter.show && !table.selected.length">
+    <i class="material-icons md-dark">search</i>
+
+    <form flex name="table.filter.form">
+        <input type="text" autofocus ng-model="table.query.filter" ng-model-options="table.filter.options" ng-change="table.onFilterChange(table.query.filter, $event)" placeholder="search">
+    </form>
+
+    <md-button class="md-icon-button" ng-click="table.removeFilter()">
+        <i class="material-icons md-dark">close</i>
+    </md-button>
+</md-data-table-toolbar>
+
+<md-data-table-container>
+    <table md-data-table md-row-select="table.selected" md-progress="table.deferred" class="md-primary" ng-show="table.count">
+        <thead md-order="table.query.order" md-trigger="table.onOrderChange">
+            <tr>
+                <th ng-repeat="property in table.model.properties track by $index" name="{{:: property.label | modelToHuman }}" order-by="{{:: property.name }}"></th>
+                <th class="loopback-admin-column-actions">&nbsp;</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr md-auto-select ng-repeat="row in table.rows | orderBy: table.query.order | limitTo: table.query.limit track by $index">
+                <td ng-repeat="property in table.model.properties track by $index">
+                    <lb-column property="::property" row="row" rows="table.rows" model="::table.model"></lb-column>
+                </td>
+                <td class="md-table-column-actions">
+                    <i class="material-icons md-dark" ng-click="table.showRowModal('edit', row, $event); $event.stopPropagation()">mode_edit</i>
+                    <md-tooltip>{{:: 'edit' | text }}</md-tooltip>
+                </td>
+            </tr>
+        </tbody>
+
+        <table md-data-table class="md-primary" ng-hide="table.count">
+            <thead md-order="table.query.order">
+                <tr>
+                    <th ng-repeat="property in table.model.properties track by $index" name="{{:: property.label }}" order-by="{{:: property.name }}"></th>
+                    <th class="loopback-admin-column-actions">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody ng-if="!table.count">
+                <tr>
+                    <td colspan="{{ table.model.properties.length + 1 }}">No records found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </table>
+</md-data-table-container>
+
+<md-data-table-pagination md-limit="table.query.limit" md-page="table.query.page" md-total="{{table.count}}" md-trigger="table.onPageChange"></md-data-table-pagination>

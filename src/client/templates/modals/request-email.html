@@ -1,0 +1,19 @@
+<md-dialog class="md-modal md-modal-wide request-email-modal">
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div class="md-modal-header">
+                <h1>{{:: 'enterYourTwitterEmail' | text }}</h1>
+            </div>
+
+            <md-input-container>
+                <label>{{:: 'email' | text }}</label>
+                <input type="email" ng-model="credentials.email">
+            </md-input-container>
+
+            <div class="buttons">
+                <md-button ng-click="$root.closeModal()">{{:: 'cancel' | text }}</md-button>
+                <md-button ng-click="createAndLoginUser()" ng-disabled="!credentials.email" class="md-primary md-raised">{{:: 'login' | text }}</md-button>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

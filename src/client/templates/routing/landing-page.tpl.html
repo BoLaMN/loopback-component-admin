@@ -1,0 +1,20 @@
+<div id="landing-page" ng-style="{ 'background-image': landing.background.image }" class="overlay">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <span flex></span>
+            <md-button ui-sref="register">{{:: 'register' | text }}</md-button>
+            <md-button ui-sref="login" class="login">{{:: 'login' | text }}</md-button>
+        </div>
+    </md-toolbar>
+
+    <section layout="column" layout-align="center center" layout-fill="layout-fill">
+        <div layout="column">
+            <md-content layout="column" class="md-padding">
+                <h1>{{:: 'homeTagline' | text }}</h1>
+                <md-button ui-sref="login" class="md-primary md-raised">{{:: 'homeButtonText' | text }}</md-button>
+            </md-content>
+        </div>
+    </section>
+
+    <span style="position: absolute; font-weight: 500; bottom: 0; right: 0; margin: 10px 15px; color: white;">{{ landing.background.title }}</span>
+</div>

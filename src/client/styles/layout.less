@@ -1,0 +1,107 @@
+@import 'app/login.less';
+@import 'app/reset-password.less';
+@import 'app/modals.less';
+@import 'app/landing-page.less';
+@import 'app/phone-styles.less';
+@import 'app/sidemenu.less';
+@import 'app/social-icons.less';
+
+@screen-sm: 768px;
+@small-screen-breakpoint: 1200px;
+
+@brand-danger: #D32F2F;
+@dashboard-background: #EFEFEF;
+@gray-lighter: lighten(@dashboard-background, 2%);
+
+.md-button.md-icon-button {
+  line-height: normal !important;
+}
+
+.content-margin {
+  overflow-x: hidden;
+}
+
+md-checkbox .md-label span {
+    line-height: 35px;
+}
+
+md-data-table-toolbar form > input {
+    width: 100%;
+    margin: 0;
+    margin-left: 6px;
+    font-size: 20px;
+    border: none;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+* {
+  outline: none;
+}
+
+md-input-container {
+    display: inline-block;
+    position: relative;
+    padding: 2px;
+    margin: 6px 0;
+    width: 100%;
+
+    .md-errors-spacer {
+        min-height: 0px !important;
+    }
+}
+
+body {
+    background-color: @dashboard-background !important;
+    overflow: hidden;
+}
+
+#left-col-upper {
+    display: flex;
+    flex: 1 1 auto;
+    height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 13px;
+    height: 13px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #A7A7A7;
+    border: solid transparent;
+    background-clip: padding-box;
+    border-width: 1px 1px 1px 1px;
+}
+
+md-icon[md-font-icon] {
+    line-height: 1;
+    width: auto;
+    vertical-align: text-bottom;
+  }
+
+[ui-view] {
+    height: 100%;
+}
+
+[ui-view].ng-enter, [ui-view].ng-leave {
+    position: absolute;
+    left: 0;
+    right: 0;
+    transition: opacity .3s ease-in-out;
+}
+
+[ui-view].ng-enter {
+    opacity: 0;
+}
+
+[ui-view].ng-enter-active {
+    opacity: 1;
+}
+
+[ui-view].ng-leave {
+    opacity: 1;
+}
+
+[ui-view].ng-leave-active {
+    opacity: 0;
+}

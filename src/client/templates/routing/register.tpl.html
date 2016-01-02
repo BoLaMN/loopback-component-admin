@@ -1,0 +1,25 @@
+<form ng-submit="submit()">
+    <md-input-container flex>
+        <label>{{:: 'email' | text }}</label>
+        <input type="text" ng-model="credentials.email">
+    </md-input-container>
+
+    <md-input-container flex>
+        <label>{{:: 'password' | text }}</label>
+        <input type="password" ng-model="credentials.password">
+    </md-input-container>
+
+    <md-input-container class="bottom-padding" flex>
+        <label>{{:: 'repeatPassword' | text }}</label>
+        <input type="password" ng-model="credentials.password_confirmation">
+    </md-input-container>
+
+    <md-container flex layout="row">
+        <cms-social-buttons></cms-social-buttons>
+        <span flex></span>
+        <md-button type="submit" class="md-primary md-raised">{{:: 'register' | text }}</md-button>
+    </md-container>
+
+</form>
+
+<p>{{:: 'alreadyHaveAccount' | text }} <a ui-sref="login">{{:: 'logInHere' | text }}</a></p>

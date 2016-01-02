@@ -1,0 +1,5 @@
+<md-select placeholder="{{ name }}" ng-model="$parent.value" ng-required="v.required">
+  <md-option ng-repeat="choice in choices" value="{{ choice.value }}">
+    {{ choice.label  | modelToHuman }}
+  </md-option>
+</md-select>

@@ -1,0 +1,15 @@
+<cms-toolbar title="'Dashboard'" layout="row"></cms-toolbar>
+
+<div class='md-padding' layout="row" layout-wrap>
+    <div flex="50" ng-repeat="model in dashboardController.models">
+        <md-card>
+            <md-card-content>
+                <cms-table name="{{ ::model.name }}"
+                    properties="::model.properties"
+                    model="::model"
+                    column-limit="4">
+                </cms-table>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

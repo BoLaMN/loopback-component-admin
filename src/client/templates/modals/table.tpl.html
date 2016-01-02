@@ -1,0 +1,33 @@
+<md-dialog class="md-modal md-modal-wide user-modal">
+    <form ng-submit="modal.submit(modal.row)" name="::modal.form">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2>{{ (modal.type | text) + ' ' + (modal.model.name | modelToHuman) + ' #' + modal.row[modal.model.identifier.name] }}</h2>
+
+            <span flex></span>
+
+            <md-button class="md-icon-button" ng-click="$root.closeModal()">
+              <md-icon aria-label="Close dialog">close</md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+				<div ng-repeat="property in ::modal.properties track by $index">
+					<lb-property property="::property" row="modal.row" model="::modal.model" form="::modal.form" error-messages="modal.errorMessages"></lb-property>
+				</div>
+
+                <div class="buttons">
+                    <md-button type="button" ng-click="$root.closeModal()">
+                        {{:: 'cancel' | text }}
+                    </md-button>
+
+                    <md-button type="submit" class="md-primary md-raised">
+                        {{ modal.type }}
+                    </md-button>
+                </div>
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

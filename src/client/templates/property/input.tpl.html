@@ -1,0 +1,10 @@
+<md-input-container>
+    <label>{{ property.label | modelToHuman }} <span ng-if="property.validation.required">*</span></label>
+    <input type="{{ type || 'text' }}" ng-model="value" id="{{ name }}" name="{{ name }}" ng-required="v.required" ng-minlength="v.minlength" ng-maxlength="v.maxlength"/>
+
+    <div ng-messages="form.$error" role="alert">
+        <div ng-repeat="errorMessage in errorMessages">
+            <div>{{ errorMessage }}</div>
+        </div>
+    </div>
+</md-input-container>

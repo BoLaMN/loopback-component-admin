@@ -1,0 +1,110 @@
+@import (reference) 'layout.less';
+
+#left-col {
+    width: 220px;
+    text-align: center;
+    flex: 0 0 auto;
+    min-width: 0px;
+    position: relative;
+    height: 100%;
+
+    .current-user {
+        border-bottom: 1px solid hsl(213,9%,14%);
+        box-shadow: 0 1px 0 0 rgba(255,255,255,.08);
+        padding: 20px;
+        cursor: pointer;
+
+        .avatar, .user-email {
+            float: left;
+        }
+
+        .avatar {
+            width: 30%;
+            overflow: hidden;
+
+            img {
+                width: 45px;
+                height: 45px;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+        }
+
+        .user-email {
+            text-align: left;
+            width: 70%;
+            padding-top: 12px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: @small-screen-breakpoint) {
+        width: 80px;
+
+        .current-user {
+            padding: 0px;
+
+            md-menu button {
+                min-width: 0px;
+            }
+
+            .user-email {
+                display: none;
+            }
+
+            .avatar {
+                width: 70%;
+                padding: 7px 12px 0px 12px;
+
+                > img {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+        }
+    }
+}
+
+md-sidemenu {
+    h2 {
+        margin: 10px 0px;
+        padding: 0px 10px;
+        text-align: left;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        magin: 0;
+
+        .md-button {
+            box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.26); /* disable to remove underline */
+            border-radius: 0px !important;
+            cursor: pointer;
+            display: flex;
+            line-height: 40px;
+            margin: 0;
+            max-height: 50px;
+            text-transform: none;
+            min-width: 0px;
+            overflow: hidden;
+            text-align: left;
+            width: 100%;
+
+            span, md-icon {
+                padding: 0px 5px;
+            }
+        }
+
+
+        .md-button .md-ripple-container {
+            border-radius: 0px !important;
+        }
+
+        button.md-button::-moz-focus-inner {
+            padding: 0;
+        }
+
+    }
+
+}

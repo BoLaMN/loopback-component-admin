@@ -1,0 +1,87 @@
+<md-dialog class="md-modal md-modal-wide account-settings-modal">
+
+    <div class="md-modal-header md-primary-hue-2 background">
+        <div class="md-modal-avatar">
+            <img class="img-responsive" ng-src="{{ $root.getAvatar(modal.auth.currentUserData) }}"/>
+        </div>
+
+        <div class="name">{{:: modal.auth.currentUserData.username }}</div>
+        <div class="email">{{:: modal.auth.currentUserData.email }}</div>
+    </div>
+
+    <div class="md-modal-nav md-primary-default background">
+        <div ng-click="modal.activeTab = 'settings'" class="{{ modal.activeTab === 'settings' ? 'md-background-default' : 'md-primary-default' }} background md-modal-nav-item">
+            <md-icon class="{{ modal.activeTab === 'settings' ? 'md-primary-default' : 'md-background-default' }} text material-icons" md-font-set="material-icons">settings</md-icon>
+        </div>
+
+        <div ng-click="modal.activeTab = 'avatar'" class="{{ modal.activeTab === 'avatar' ? 'md-background-default' : 'md-primary-default' }} background md-modal-nav-item">
+            <md-icon class="{{ modal.activeTab === 'avatar' ? 'md-primary-default' : 'md-background-default' }} text material-icons" md-font-set="material-icons">face</md-icon>
+        </div>
+
+        <div ng-click="modal.activeTab = 'password'" class="{{ modal.activeTab === 'password' ? 'md-background-default' : 'md-primary-default' }} background md-modal-nav-item">
+            <md-icon class="{{ modal.activeTab === 'password' ? 'md-primary-default' : 'md-background-default' }} text material-icons" md-font-set="material-icons">lock</md-icon>
+        </div>
+    </div>
+
+    <div class="md-modal-tab" ng-class="{ open: modal.activeTab === 'settings' }">
+        <md-input-container>
+            <label>{{:: 'username' | text }}</label>
+            <input class="username" type="text" ng-model="modal.auth.currentUserData.username">
+        </md-input-container>
+
+        <md-input-container>
+            <label>{{:: 'firstName' | text }}</label>
+            <input type="text" ng-model="modal.auth.currentUserData.first_name">
+        </md-input-container>
+
+        <md-input-container>
+            <label>{{:: 'lastName' | text }}</label>
+            <input type="text" ng-model="modal.auth.currentUserData.last_name">
+        </md-input-container>
+
+        <div class="buttons">
+            <md-button ng-click="$root.closeModal()">{{:: 'cancel' | text }}</md-button>
+            <md-button ng-click="modal.updateAccountSettings()" class="md-raised md-primary">{{:: 'confirm' | text }}</md-button>
+        </div>
+    </div>
+
+    <div class="md-modal-tab" ng-class="{ open: modal.activeTab === 'password' }">
+        <form layout="column" ng-submit="modal.changePassword(changePasswordModel)">
+            <md-input-container layout="column">
+                <label>{{:: 'currentPassword' | text }}</label>
+                <input type="password" ng-model="changePasswordModel.oldPassword">
+            </md-input-container>
+
+            <md-input-container layout="column">
+                <label>{{:: 'newPassword' | text }}</label>
+                <input type="password" ng-model="changePasswordModel.newPassword">
+            </md-input-container>
+
+            <md-input-container layout="column">
+                <label>{{:: 'confirmPassword' | text }}</label>
+                <input type="password" ng-model="changePasswordModel.newPassword_confirmation">
+            </md-input-container>
+
+            <div class="buttons">
+                <md-button ng-click="$root.closeModal()">{{:: 'cancel' | text }}</md-button>
+                <md-button type="submit" class="md-raised md-primary">{{:: 'change' | text }}</md-button>
+            </div>
+        </form>
+    </div>
+
+    <div class="md-modal-tab avatar-tab" ng-class="{ open: modal.activeTab === 'avatar' }">
+        <img class="img-responsive" ng-src="{{ $root.getAvatar(modal.auth.currentUserData) }}"/>
+
+        <p>{{:: 'avatarAcceptedFormats' | text }}</p>
+        <p>{{:: 'avatarResizeExpl' | text }}</p>
+
+        <div class="buttons">
+            <md-button ng-click="$root.closeModal()">{{:: 'cancel' | text }}</md-button>
+            <md-button ng-click="modal.removeAvatar()">{{:: 'remove' | text }}</md-button>
+            <md-button ng-file-select ng-file-change="modal.upload($files)" accept="image/*" ngf-accept="'.png,.jpg'" class="md-raised md-primary">
+                <i class="icon icon-upload-cloud"></i>
+                {{:: 'upload' | text }}
+            </md-button>
+        </div>
+    </div>
+</md-dialog>

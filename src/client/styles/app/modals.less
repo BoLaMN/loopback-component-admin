@@ -1,0 +1,166 @@
+.md-modal {
+    .md-modal-info {
+        order: 3;
+    }
+
+    .md-modal-header {
+        position: relative;
+    }
+
+    &.md-modal-wide {
+        min-width: 450px;
+    }
+
+    &.limit-width {
+        max-width: 450px;
+    }
+
+    .sub-header {
+        margin-top: 15px;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 19px;
+        color: lighten(#000, 30%);
+    }
+
+    .buttons {
+        text-align: right;
+
+        .btn {
+            padding: 7px 16px;
+
+            &:first-of-type {
+                margin-right: 5px;
+            }
+        }
+    }
+}
+
+.account-settings-modal {
+    padding: 0;
+    overflow: visible;
+
+    @media screen and ( max-height: 720px ) {
+        .md-modal-header {
+            display: none !important;
+        }
+
+        .md-modal-nav-item {
+            font-size: 25px !important;
+        }
+    }
+
+    .md-modal-header {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 20px;
+        flex: 0 0 auto;
+
+        > .name {
+            text-align: center;
+            font-size: 25px;
+            font-weight: 100;
+            margin-top: 80px;
+        }
+
+        > .email {
+            padding-top: 5px;
+            text-align: center;
+
+        }
+    }
+
+    .md-modal-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        position: absolute;
+        top: -50px;
+        left: ~"calc(50% - 60px)";
+        margin: 0 auto;
+
+        > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    }
+
+    .md-modal-nav {
+        display: flex;
+        flex-direction: row;
+        flex: 0 0 auto;
+
+        > .md-modal-nav-item {
+            font-size: 35px;
+            padding: 15px;
+            flex: 1 1 auto;
+            text-align: center;
+            cursor: pointer;
+
+            &.active {
+                background-color: #fff;
+                color: #22322F;
+            }
+        }
+    }
+
+    .md-modal-tab {
+        display: none;
+        flex-direction: column;
+        padding: 25px;
+        flex: 0 0 auto;
+
+        &.open {
+            display: flex;
+        }
+    }
+
+    .avatar-tab {
+        .img-responsive {
+            margin: 15px auto;
+        }
+
+        p {
+            text-align: center;
+        }
+    }
+
+    .buttons {
+        margin-top: 30px;
+        md-select {
+            padding-left: 2px;
+        }
+    }
+
+
+    md-input-container {
+        padding-bottom: 10px;
+
+        label {
+            color: rgba(0,0,0,0.36) !important;
+        }
+    }
+}
+
+.user-modal {
+    form {
+        overflow: hidden;
+    }
+
+    .errors {
+        margin-top: 15px;
+        color: @brand-danger;
+
+        .error {
+            margin-top: 5px;
+        }
+    }
+
+    .buttons {
+        margin-top: 20px;
+    }
+}

@@ -1,0 +1,10 @@
+<md-sidenav flex flex-order="1" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" layout="column" style="float: left" id="left-col" class="md-black-primary-default background">
+    <cms-current-user></cms-current-user>
+
+    <md-sidemenu menu="browserController.menu"></md-sidemenu>
+
+</md-sidenav>
+
+<section flex flex-order="2" layout="column" style="margin: 0px; max-height: 100%;">
+    <div ui-view style="overflow: auto;"></div>
+</section>

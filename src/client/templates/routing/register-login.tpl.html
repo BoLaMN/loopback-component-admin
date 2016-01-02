@@ -1,0 +1,15 @@
+<section id="login-page" layout="column" layout-align="center center" layout-fill="layout-fill">
+    <div layout="column" style="width: 500px; max-width: 90%" class="login-container md-whiteframe-z1">
+        <md-toolbar layout="row">
+            <h2 class="md-toolbar-tools">
+                {{ pageTitle }}
+            </h2>
+        </md-toolbar>
+
+        <md-content layout="column" class="md-padding">
+            <div ui-view="content"></div>
+
+            <md-progress-circular class="loader" ng-show="loading" md-mode="indeterminate"></md-progress-circular>
+        </md-content>
+    </div>
+</section>
