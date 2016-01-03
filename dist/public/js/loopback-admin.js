@@ -1,5 +1,4 @@
-var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-  hasProp = {}.hasOwnProperty,
+var hasProp = {}.hasOwnProperty,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 angular.module('loopback-admin', ['ui.router', 'md.data.table', 'ngSanitize', 'ngAnimate', 'ngAria', 'ngMaterial', 'angularFileUpload', 'loopback-admin.services', 'loopback-admin.theme']).config(["$urlRouterProvider", "$mdThemingProvider", "$mdIconProvider", "$compileProvider", function($urlRouterProvider, $mdThemingProvider, $mdIconProvider, $compileProvider) {
@@ -918,7 +917,6 @@ angular.module('loopback-admin').factory('Model', ["$injector", "stringUtils", "
       this.label = stringUtils.camelCase(this.name);
       this.properties = [];
       this.propertyNames = [];
-      this.relations = [];
       this.relationNames = [];
       this.resource = LoopbackInjector(name);
       for (key in model) {
@@ -927,38 +925,35 @@ angular.module('loopback-admin').factory('Model', ["$injector", "stringUtils", "
           this[key] = value;
         }
       }
-      this.constructRelations(model.relations);
       this.constructProperties(model.properties);
+      this.constructRelations(model.relations);
     }
 
     Model.prototype.constructRelations = function(modelRelations) {
-      var _propertyTypes, _relations;
+      var _propertyTypes;
       _propertyTypes = PropertyTypeConfiguration;
-      _relations = [];
       if (modelRelations) {
         Object.keys(modelRelations).forEach((function(_this) {
           return function(relationName) {
             var propertyConstructor, relation;
             relation = modelRelations[relationName];
             if (relation != null ? relation.foreignKey : void 0) {
-              _this.relationNames.push(relation.foreignKey);
+              _this.relationNames.push(relationName);
             }
             if (_propertyTypes[relation.type]) {
               propertyConstructor = $injector.get(_propertyTypes[relation.type]);
-              return _relations.push(new propertyConstructor(relationName, relation));
+              return _this.properties.push(new propertyConstructor(relationName, relation));
             } else {
               return $log.warn('no such type defined for', relation.type, relation);
             }
           };
         })(this));
       }
-      return this.flattenAndStore(_relations, this.relations);
     };
 
     Model.prototype.constructProperties = function(modelProperties) {
-      var _properties, _propertyTypes;
+      var _propertyTypes;
       _propertyTypes = PropertyTypeConfiguration;
-      _properties = [];
       if (modelProperties) {
         Object.keys(modelProperties).forEach((function(_this) {
           return function(propertyName) {
@@ -968,45 +963,17 @@ angular.module('loopback-admin').factory('Model', ["$injector", "stringUtils", "
               if (property.id) {
                 _this.identifier = new Property(propertyName);
               }
-              if (indexOf.call(_this.relationNames, propertyName) < 0) {
-                if (_propertyTypes[property.type.toLowerCase()]) {
-                  _this.propertyNames.push(propertyName);
-                  propertyConstructor = $injector.get(_propertyTypes[property.type.toLowerCase()]);
-                  return _properties.push(new propertyConstructor(propertyName, property));
-                } else {
-                  return $log.warn('no such type defined for', property.type, property);
-                }
+              if (_propertyTypes[property.type.toLowerCase()]) {
+                _this.propertyNames.push(propertyName);
+                propertyConstructor = $injector.get(_propertyTypes[property.type.toLowerCase()]);
+                return _this.properties.push(new propertyConstructor(propertyName, property));
+              } else {
+                return $log.warn('no such type defined for', property.type, property);
               }
             }
           };
         })(this));
       }
-      return this.flattenAndStore(_properties, this.properties);
-    };
-
-    Model.prototype.addProperty = function(property, properties) {
-      if (property.order === null) {
-        property.order = properties.length;
-      }
-      properties.push(property);
-      properties = properties.sort(function(a, b) {
-        return a.order - b.order;
-      });
-      return this;
-    };
-
-    Model.prototype.flattenAndStore = function(_properties, properties) {
-      return [].slice.call(_properties).map((function(_this) {
-        return function(argument) {
-          return _this.flatten(argument).map(function(arg) {
-            return _this.addProperty(arg, properties);
-          });
-        };
-      })(this), this);
-    };
-
-    Model.prototype.flatten = function(arg) {
-      return [arg];
     };
 
     return Model;
@@ -1107,6 +1074,69 @@ angular.module('loopback-admin').factory('Property', ["stringUtils", function(st
     return Property;
 
   })();
+}]);
+
+'use strict';
+
+angular.module('loopback-admin').config(["PropertyViewConfigurationProvider", function(PropertyViewConfigurationProvider) {
+  var fvp;
+  fvp = PropertyViewConfigurationProvider;
+  return fvp.registerPropertyView('belongsTo', {
+    column: null,
+    field: '<lb-belongs-to-property form="form[property.name]" error-messages="errorMessages[property.name]" model="model" property="::property" value="row[property.name]"></lb-belongs-to-property>'
+  });
+}]);
+
+'use strict';
+
+angular.module('loopback-admin').directive('lbBelongsToProperty', function() {
+  return {
+    scope: {
+      property: '=',
+      value: '=',
+      form: '=',
+      errorMessages: '='
+    },
+    templateUrl: 'templates/property/belongs-to.tpl.html',
+    restrict: 'E',
+    link: function(scope, element) {
+      var j, len, property, ref, resource, value;
+      property = scope.property;
+      scope.model = property.getModel();
+      resource = scope.model.resource;
+      scope.count = 0;
+      scope.rows = [];
+      ref = scope.value;
+      for (j = 0, len = ref.length; j < len; j++) {
+        value = ref[j];
+        scope.rows.push(new resource(value));
+        scope.count++;
+      }
+      scope.name = property.name;
+      scope.v = property.validation;
+    }
+  };
+});
+
+'use strict';
+
+angular.module('loopback-admin').factory('BelongsToProperty', ["Property", "LoopBackAdminConfiguration", function(Property, LoopBackAdminConfiguration) {
+  var BelongsToProperty;
+  return BelongsToProperty = (function(superClass) {
+    extend(BelongsToProperty, superClass);
+
+    function BelongsToProperty(name, property) {
+      BelongsToProperty.__super__.constructor.call(this, name, property);
+      this.type = "belongsTo";
+    }
+
+    BelongsToProperty.prototype.getModel = function() {
+      return LoopBackAdminConfiguration.getModel(this.model);
+    };
+
+    return BelongsToProperty;
+
+  })(Property);
 }]);
 
 'use strict';
@@ -1459,6 +1489,69 @@ angular.module('loopback-admin').factory('FloatProperty', ["NumberProperty", fun
 angular.module('loopback-admin').config(["PropertyViewConfigurationProvider", function(PropertyViewConfigurationProvider) {
   var fvp;
   fvp = PropertyViewConfigurationProvider;
+  return fvp.registerPropertyView('hasMany', {
+    column: '',
+    field: '<lb-has-many-property form="form[property.name]" error-messages="errorMessages[property.name]" model="model" property="::property" value="row[property.name]"></lb-has-many-property>'
+  });
+}]);
+
+'use strict';
+
+angular.module('loopback-admin').directive('lbHasManyProperty', function() {
+  return {
+    scope: {
+      property: '=',
+      value: '=',
+      form: '=',
+      errorMessages: '='
+    },
+    templateUrl: 'templates/property/has-many.tpl.html',
+    restrict: 'E',
+    link: function(scope, element) {
+      var j, len, property, ref, resource, value;
+      property = scope.property;
+      scope.model = property.getModel();
+      resource = scope.model.resource;
+      scope.count = 0;
+      scope.rows = [];
+      ref = scope.value;
+      for (j = 0, len = ref.length; j < len; j++) {
+        value = ref[j];
+        scope.rows.push(new resource(value));
+        scope.count++;
+      }
+      scope.name = property.name;
+      scope.v = property.validation;
+    }
+  };
+});
+
+'use strict';
+
+angular.module('loopback-admin').factory('HasManyProperty', ["Property", "LoopBackAdminConfiguration", function(Property, LoopBackAdminConfiguration) {
+  var HasManyProperty;
+  return HasManyProperty = (function(superClass) {
+    extend(HasManyProperty, superClass);
+
+    function HasManyProperty(name, property) {
+      HasManyProperty.__super__.constructor.call(this, name, property);
+      this.type = "hasMany";
+    }
+
+    HasManyProperty.prototype.getModel = function() {
+      return LoopBackAdminConfiguration.getModel(this.model);
+    };
+
+    return HasManyProperty;
+
+  })(Property);
+}]);
+
+'use strict';
+
+angular.module('loopback-admin').config(["PropertyViewConfigurationProvider", function(PropertyViewConfigurationProvider) {
+  var fvp;
+  fvp = PropertyViewConfigurationProvider;
   return fvp.registerPropertyView('string', {
     column: '<lb-string-column value="row[property.name]"></lb-string-column>',
     field: '<lb-input-property form="form[property.name]" error-messages="errorMessages[property.name]" property="::property" value="row[property.name]"></lb-input-property>'
@@ -1470,7 +1563,6 @@ angular.module('loopback-admin').config(["PropertyViewConfigurationProvider", fu
 angular.module('loopback-admin').directive('lbInputProperty', function() {
   return {
     scope: {
-      type: '@',
       property: '=',
       value: '=',
       form: '=',
@@ -1907,6 +1999,7 @@ angular.module('loopback-admin').controller('TableCtrl', ["$mdDialog", "$rootSco
     var filter, page, params;
     page = parseInt(vm.query.page, 10);
     filter = {
+      include: vm.model.relationNames,
       skip: (page - 1) * vm.query.limit,
       limit: vm.query.limit,
       order: vm.query.orderPlain + ' ' + vm.query.orderDirection

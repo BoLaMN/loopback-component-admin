@@ -369,6 +369,32 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
   );
 
 
+  $templateCache.put('templates/property/belongs-to.tpl.html',
+    "<md-data-table-toolbar class=\"property\">\n" +
+    "    <div>{{ property.label }}</div>\n" +
+    "</md-data-table-toolbar>\n" +
+    "\n" +
+    "\n" +
+    "<md-data-table-container>\n" +
+    "    <table md-data-table md-row-select=\"selected\" md-progress=\"deferred\" class=\"md-primary\">\n" +
+    "        <thead md-order=\"query.order\" md-trigger=\"onOrderChange\">\n" +
+    "            <tr>\n" +
+    "                <th ng-repeat=\"property in model.properties track by $index\" name=\"{{:: property.label | modelToHuman }}\" order-by=\"{{:: property.name }}\"></th>\n" +
+    "            </tr>\n" +
+    "        </thead>\n" +
+    "\n" +
+    "        <tbody>\n" +
+    "            <tr md-auto-select>\n" +
+    "                <td ng-repeat=\"property in model.properties track by $index\">\n" +
+    "                    <lb-column property=\"::property\" row=\"value\" rows=\"rows\" model=\"::model\"></lb-column>\n" +
+    "                </td>\n" +
+    "            </tr>\n" +
+    "        </tbody>\n" +
+    "    </table>\n" +
+    "</md-data-table-container>"
+  );
+
+
   $templateCache.put('templates/property/checkbox.tpl.html',
     "<md-switch ng-model=\"value\" id=\"{{ :: name }}\" name=\"{{ :: name }}\" aria-label=\"{{ :: name}}\" class=\"md-primary admin-switch\">\n" +
     "  <span ng-class=\"{ 'barred-text': !value }\">\n" +
@@ -405,6 +431,44 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
     "  ng-model=\"value\"\n" +
     "  ng-required=\"v.required\">\n" +
     "</md-datepicker>\n"
+  );
+
+
+  $templateCache.put('templates/property/has-many.tpl.html',
+    "<md-data-table-toolbar class=\"property\">\n" +
+    "    <div>{{ property.label }}</div>\n" +
+    "</md-data-table-toolbar>\n" +
+    "\n" +
+    "<md-data-table-container>\n" +
+    "    <table md-data-table md-progress=\"deferred\" class=\"md-primary\" ng-show=\"count\">\n" +
+    "        <thead md-order=\"query.order\" md-trigger=\"onOrderChange\">\n" +
+    "            <tr>\n" +
+    "                <th ng-repeat=\"property in model.properties track by $index\" name=\"{{:: property.label | modelToHuman }}\" order-by=\"{{:: property.name }}\"></th>\n" +
+    "            </tr>\n" +
+    "        </thead>\n" +
+    "\n" +
+    "        <tbody>\n" +
+    "            <tr ng-repeat=\"row in rows | orderBy: query.order | limitTo: query.limit track by $index\">\n" +
+    "                <td ng-repeat=\"property in model.properties track by $index\">\n" +
+    "                    <lb-column property=\"::property\" row=\"row\" rows=\"rows\" model=\"::model\"></lb-column>\n" +
+    "                </td>\n" +
+    "            </tr>\n" +
+    "        </tbody>\n" +
+    "\n" +
+    "        <table md-data-table class=\"md-primary\" ng-hide=\"count\">\n" +
+    "            <thead md-order=\"query.order\">\n" +
+    "                <tr>\n" +
+    "                    <th ng-repeat=\"property in model.properties track by $index\" name=\"{{:: property.label }}\" order-by=\"{{:: property.name }}\"></th>\n" +
+    "                </tr>\n" +
+    "            </thead>\n" +
+    "            <tbody ng-if=\"!count\">\n" +
+    "                <tr>\n" +
+    "                    <td colspan=\"{{ model.properties.length + 1 }}\">No records found.</td>\n" +
+    "                </tr>\n" +
+    "            </tbody>\n" +
+    "        </table>\n" +
+    "    </table>\n" +
+    "</md-data-table-container>"
   );
 
 

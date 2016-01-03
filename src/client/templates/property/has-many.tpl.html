@@ -1,0 +1,34 @@
+<md-data-table-toolbar class="property">
+    <div>{{ property.label }}</div>
+</md-data-table-toolbar>
+
+<md-data-table-container>
+    <table md-data-table md-progress="deferred" class="md-primary" ng-show="count">
+        <thead md-order="query.order" md-trigger="onOrderChange">
+            <tr>
+                <th ng-repeat="property in model.properties track by $index" name="{{:: property.label | modelToHuman }}" order-by="{{:: property.name }}"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr ng-repeat="row in rows | orderBy: query.order | limitTo: query.limit track by $index">
+                <td ng-repeat="property in model.properties track by $index">
+                    <lb-column property="::property" row="row" rows="rows" model="::model"></lb-column>
+                </td>
+            </tr>
+        </tbody>
+
+        <table md-data-table class="md-primary" ng-hide="count">
+            <thead md-order="query.order">
+                <tr>
+                    <th ng-repeat="property in model.properties track by $index" name="{{:: property.label }}" order-by="{{:: property.name }}"></th>
+                </tr>
+            </thead>
+            <tbody ng-if="!count">
+                <tr>
+                    <td colspan="{{ model.properties.length + 1 }}">No records found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </table>
+</md-data-table-container>

@@ -4,7 +4,6 @@ angular.module 'loopback-admin'
 
 .directive 'lbInputProperty', ->
   scope:
-    type: '@'
     property: '='
     value: '='
     form: '='

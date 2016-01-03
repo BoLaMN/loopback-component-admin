@@ -60,6 +60,7 @@ angular.module 'loopback-admin'
     page = parseInt vm.query.page, 10
 
     filter =
+      include: vm.model.relationNames
       skip: (page - 1) * vm.query.limit
       limit: vm.query.limit
       order: vm.query.orderPlain + ' ' + vm.query.orderDirection

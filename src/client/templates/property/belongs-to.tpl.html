@@ -1,0 +1,22 @@
+<md-data-table-toolbar class="property">
+    <div>{{ property.label }}</div>
+</md-data-table-toolbar>
+
+
+<md-data-table-container>
+    <table md-data-table md-row-select="selected" md-progress="deferred" class="md-primary">
+        <thead md-order="query.order" md-trigger="onOrderChange">
+            <tr>
+                <th ng-repeat="property in model.properties track by $index" name="{{:: property.label | modelToHuman }}" order-by="{{:: property.name }}"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr md-auto-select>
+                <td ng-repeat="property in model.properties track by $index">
+                    <lb-column property="::property" row="value" rows="rows" model="::model"></lb-column>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</md-data-table-container>
