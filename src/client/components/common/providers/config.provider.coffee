@@ -44,6 +44,7 @@ angular.module 'loopback-admin'
         @errorMessage
 
       userModel: $injector.get configOptions.userModel
+      userLoginField: configOptions.userLoginField
 
       addModel: (model) ->
         if !model

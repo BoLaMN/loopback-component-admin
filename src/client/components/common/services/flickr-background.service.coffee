@@ -35,6 +35,6 @@ angular.module 'loopback-admin'
             defer.resolve image: 'url(' + image.url_l + ')', title: image.title
           else defer.resolve()
 
-    else defer.resolve image: "url('/images/background.png')"
+    else defer.resolve image: "url('./images/background.png')"
 
     defer.promise

@@ -591,8 +591,8 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
   $templateCache.put('templates/routing/login.tpl.html',
     "<form ng-submit=\"loginController.login(credentials)\">\n" +
     "    <md-input-container flex>\n" +
-    "        <label>{{:: 'username' | text }}</label>\n" +
-    "        <input type=\"text\" ng-model=\"credentials.username\">\n" +
+    "        <label>{{:: loginController.userLoginField | text }}</label>\n" +
+    "        <input type=\"text\" ng-model=\"credentials[loginController.userLoginField]\">\n" +
     "    </md-input-container>\n" +
     "\n" +
     "    <md-input-container flex>\n" +

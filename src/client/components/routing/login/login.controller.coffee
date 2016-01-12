@@ -7,6 +7,8 @@ angular.module 'loopback-admin'
 
   User = LoopBackAdminConfiguration.userModel
 
+  vm.userLoginField = LoopBackAdminConfiguration.userLoginField
+
   vm.login = (credentials) ->
     request = User.login credentials
 

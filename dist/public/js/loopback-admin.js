@@ -418,6 +418,7 @@ angular.module('loopback-admin').provider('LoopBackAdminConfiguration', ["LoopBa
           return this.errorMessage;
         },
         userModel: $injector.get(configOptions.userModel),
+        userLoginField: configOptions.userLoginField,
         addModel: function(model) {
           var foundModel;
           if (!model) {
@@ -898,7 +899,7 @@ angular.module('loopback-admin').factory('Flickr', ["$q", "$http", "LoopBackAdmi
         });
       } else {
         defer.resolve({
-          image: "url('/images/background.png')"
+          image: "url('./images/background.png')"
         });
       }
       return defer.promise;
@@ -1760,6 +1761,7 @@ angular.module('loopback-admin').controller('loginController', ["$state", "$root
   var User, vm;
   vm = this;
   User = LoopBackAdminConfiguration.userModel;
+  vm.userLoginField = LoopBackAdminConfiguration.userLoginField;
   vm.login = function(credentials) {
     var request;
     request = User.login(credentials);

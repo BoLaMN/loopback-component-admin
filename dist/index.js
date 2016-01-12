@@ -76,6 +76,7 @@ routes = function(loopbackApplication, options) {
     resourcePath: 'config.json',
     mountPath: '/admin',
     userModel: 'User',
+    userLoginField: 'username',
     apiInfo: loopbackApplication.get('apiInfo') || {}
   });
   router = new loopback.Router();

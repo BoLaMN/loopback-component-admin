@@ -80,6 +80,7 @@ routes = (loopbackApplication, options) ->
     resourcePath: 'config.json'
     mountPath: '/admin'
     userModel: 'User'
+    userLoginField: 'username'
     apiInfo: loopbackApplication.get('apiInfo') or {})
 
   router = new loopback.Router()
