@@ -12,7 +12,9 @@ Loopback Admin Component
 ```
 {
   "loopback-component-admin": {
-    "mountPath": "/admin"
+    "mountPath": "/admin",
+    "userModel": "CustomUserModelHere", (optional)
+    "userLoginField": "email|username" (optional)
   }
 }
 ```
