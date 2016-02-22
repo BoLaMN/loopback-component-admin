@@ -9,4 +9,4 @@ angular.module 'loopback-admin'
     column: '<lb-string-column value="row[property.name]"></lb-string-column>',
     field: '<lb-input-property form="form[property.name]" error-messages="errorMessages[property.name]" property="::property" value="row[property.name]"></lb-input-property>'
 
-  fvp.registerAlias 'ObjectID', 'string'
+  fvp.registerAlias 'objectid', 'string'
