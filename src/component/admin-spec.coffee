@@ -74,7 +74,7 @@ module.exports = (loopbackApplication, options, callback) ->
   port = loopbackApplication.get 'port'
   api  = loopbackApplication.get 'restApiRoot'
 
-  url = 'http://' + host + ':' + port + api
+  url = options.url or 'http://' + host + ':' + port + api
 
   sdkFile = services loopbackApplication, 'loopback-admin.services', url
   sdkFilePath = path.join __dirname, 'public/js/loopback-admin.resources.js'
