@@ -14,7 +14,7 @@ angular.module 'loopback-admin'
   vm.query =
     filter: null
     limit: 10
-    order: 'id'
+    orderPlain: 'id'
     orderDirection: 'DESC'
     page: 1
 
