@@ -19,7 +19,10 @@ attachXTotalCount = (loopbackApplication) ->
     filter = undefined
 
     if ctx.args and ctx.args.filter
-      filter = JSON.parse(ctx.args.filter).where
+      if typeof ctx.args.filter is 'object'
+        filter = ctx.args.filter.where
+      else
+        filter = JSON.parse(ctx.args.filter).where
 
     if !ctx.res._headerSent
       @count filter, (err, count) ->
