@@ -24,7 +24,11 @@ attachXTotalCount = function(loopbackApplication) {
     var filter;
     filter = void 0;
     if (ctx.args && ctx.args.filter) {
-      filter = JSON.parse(ctx.args.filter).where;
+      if (typeof ctx.args.filter === 'object') {
+        filter = ctx.args.filter.where;
+      } else {
+        filter = JSON.parse(ctx.args.filter).where;
+      }
     }
     if (!ctx.res._headerSent) {
       this.count(filter, function(err, count) {
