@@ -6,7 +6,7 @@ angular.module 'loopback-admin'
   propertyTypes = {}
 
   registerPropertyType: (type, PropertyType) ->
-    if type is 'string'
+    if type is 'string' or type is 'objectid'
       PropertyType = ''
 
     propertyTypes[type] = PropertyType + 'Property'

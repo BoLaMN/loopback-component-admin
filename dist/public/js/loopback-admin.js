@@ -48,9 +48,13 @@ angular.module('loopback-admin').controller('AccountSettingsController', ["$uplo
   };
   vm.updateAccountSettings = function(settings, id) {
     var payload, userId;
-    payload = settings || this.accountSettings;
-    userId = id || this.current.id;
-    return User.update(id, payload).$promise.then((function(_this) {
+    payload = settings || this.auth.currentUserData;
+    userId = id || this.auth.currentUserId;
+    return User.update({
+      where: {
+        id: userId
+      }
+    }, payload).$promise.then((function(_this) {
       return function(data) {
         if (!settings) {
           $rootScope.showToast('profileUpdateSuccess', true);
@@ -554,6 +558,7 @@ angular.module('loopback-admin').filter('text', ["typedText", "$log", function(t
   avatarAcceptedFormats: 'Accepted formats: png, jpeg.',
   avatarResizeExpl: 'Your avatar will be resized to 200x200 (px) if it\'s bigger then that.',
   view: 'View',
+  phone: 'Phone Number',
   genericError: 'something went wrong, please try again later.',
   favoriteExists: 'You have already marked this photo as favorite.',
   passMatches: 'Password is correct.',
@@ -989,7 +994,7 @@ angular.module('loopback-admin').provider('PropertyTypeConfiguration', ["$inject
   propertyTypes = {};
   return {
     registerPropertyType: function(type, PropertyType) {
-      if (type === 'string') {
+      if (type === 'string' || type === 'objectid') {
         PropertyType = '';
       }
       return propertyTypes[type] = PropertyType + 'Property';
@@ -1553,10 +1558,11 @@ angular.module('loopback-admin').factory('HasManyProperty', ["Property", "LoopBa
 angular.module('loopback-admin').config(["PropertyViewConfigurationProvider", function(PropertyViewConfigurationProvider) {
   var fvp;
   fvp = PropertyViewConfigurationProvider;
-  return fvp.registerPropertyView('string', {
+  fvp.registerPropertyView('string', {
     column: '<lb-string-column value="row[property.name]"></lb-string-column>',
     field: '<lb-input-property form="form[property.name]" error-messages="errorMessages[property.name]" property="::property" value="row[property.name]"></lb-input-property>'
   });
+  return fvp.registerAlias('objectid', 'string');
 }]);
 
 'use strict';
@@ -1812,7 +1818,9 @@ angular.module('loopback-admin').config(["$stateProvider", function($stateProvid
 
 'use strict';
 
-angular.module('loopback-admin').controller('logoutController', ["$location", "$rootScope", "User", function($location, $rootScope, User) {
+angular.module('loopback-admin').controller('logoutController', ["$location", "$rootScope", "LoopBackAdminConfiguration", function($location, $rootScope, LoopBackAdminConfiguration) {
+  var User;
+  User = LoopBackAdminConfiguration.userModel;
   User.logout();
   $location.path('/login');
 }]);
@@ -1957,7 +1965,7 @@ angular.module('loopback-admin').controller('TableCtrl', ["$mdDialog", "$rootSco
   vm.query = {
     filter: null,
     limit: 10,
-    order: 'id',
+    orderPlain: 'id',
     orderDirection: 'DESC',
     page: 1
   };
