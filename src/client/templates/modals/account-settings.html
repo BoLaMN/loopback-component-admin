@@ -26,17 +26,12 @@
     <div class="md-modal-tab" ng-class="{ open: modal.activeTab === 'settings' }">
         <md-input-container>
             <label>{{:: 'username' | text }}</label>
-            <input class="username" type="text" ng-model="modal.auth.currentUserData.username">
+            <input class="username" type="text" ng-model="modal.auth.currentUserData.nickname">
         </md-input-container>
 
         <md-input-container>
-            <label>{{:: 'firstName' | text }}</label>
-            <input type="text" ng-model="modal.auth.currentUserData.first_name">
-        </md-input-container>
-
-        <md-input-container>
-            <label>{{:: 'lastName' | text }}</label>
-            <input type="text" ng-model="modal.auth.currentUserData.last_name">
+            <label>{{:: 'phone' | text }}</label>
+            <input type="text" ng-model="modal.auth.currentUserData.phone">
         </md-input-container>
 
         <div class="buttons">

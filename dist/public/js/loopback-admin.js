@@ -48,9 +48,13 @@ angular.module('loopback-admin').controller('AccountSettingsController', ["$uplo
   };
   vm.updateAccountSettings = function(settings, id) {
     var payload, userId;
-    payload = settings || this.accountSettings;
-    userId = id || this.current.id;
-    return User.update(id, payload).$promise.then((function(_this) {
+    payload = settings || this.auth.currentUserData;
+    userId = id || this.auth.currentUserId;
+    return User.update({
+      where: {
+        id: userId
+      }
+    }, payload).$promise.then((function(_this) {
       return function(data) {
         if (!settings) {
           $rootScope.showToast('profileUpdateSuccess', true);
@@ -554,6 +558,7 @@ angular.module('loopback-admin').filter('text', ["typedText", "$log", function(t
   avatarAcceptedFormats: 'Accepted formats: png, jpeg.',
   avatarResizeExpl: 'Your avatar will be resized to 200x200 (px) if it\'s bigger then that.',
   view: 'View',
+  phone: 'Phone Number',
   genericError: 'something went wrong, please try again later.',
   favoriteExists: 'You have already marked this photo as favorite.',
   passMatches: 'Password is correct.',

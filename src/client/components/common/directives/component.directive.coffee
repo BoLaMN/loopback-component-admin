@@ -29,10 +29,10 @@ angular.module 'loopback-admin'
     @current.email.split('@')[0]
 
   vm.updateAccountSettings = (settings, id) ->
-    payload = settings or @accountSettings
-    userId = id or @current.id
+    payload = settings or @auth.currentUserData
+    userId = id or @auth.currentUserId
 
-    User.update(id, payload).$promise
+    User.update({ where:{id:userId} }, payload).$promise
       .then (data) =>
         if !settings
           $rootScope.showToast 'profileUpdateSuccess', true
