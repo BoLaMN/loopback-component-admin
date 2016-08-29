@@ -2,7 +2,8 @@
 
 angular.module 'loopback-admin'
 
-.controller 'logoutController', ($location, $rootScope, User) ->
+.controller 'logoutController', ($location, $rootScope, LoopBackAdminConfiguration) ->
+  User = LoopBackAdminConfiguration.userModel
   User.logout()
 
   $location.path '/login'

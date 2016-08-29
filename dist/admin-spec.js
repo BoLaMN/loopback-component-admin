@@ -58,7 +58,7 @@ module.exports = function(loopbackApplication, options, callback) {
   host = loopbackApplication.get('host');
   port = loopbackApplication.get('port');
   api = loopbackApplication.get('restApiRoot');
-  url = 'http://' + host + ':' + port + api;
+  url = options.url || 'http://' + host + ':' + port + api;
   sdkFile = services(loopbackApplication, 'loopback-admin.services', url);
   sdkFilePath = path.join(__dirname, 'public/js/loopback-admin.resources.js');
   fs.writeFileSync(sdkFilePath, sdkFile, 'utf-8');

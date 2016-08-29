@@ -1553,10 +1553,11 @@ angular.module('loopback-admin').factory('HasManyProperty', ["Property", "LoopBa
 angular.module('loopback-admin').config(["PropertyViewConfigurationProvider", function(PropertyViewConfigurationProvider) {
   var fvp;
   fvp = PropertyViewConfigurationProvider;
-  return fvp.registerPropertyView('string', {
+  fvp.registerPropertyView('string', {
     column: '<lb-string-column value="row[property.name]"></lb-string-column>',
     field: '<lb-input-property form="form[property.name]" error-messages="errorMessages[property.name]" property="::property" value="row[property.name]"></lb-input-property>'
   });
+  return fvp.registerAlias('objectid', 'string');
 }]);
 
 'use strict';
@@ -1812,7 +1813,9 @@ angular.module('loopback-admin').config(["$stateProvider", function($stateProvid
 
 'use strict';
 
-angular.module('loopback-admin').controller('logoutController', ["$location", "$rootScope", "User", function($location, $rootScope, User) {
+angular.module('loopback-admin').controller('logoutController', ["$location", "$rootScope", "LoopBackAdminConfiguration", function($location, $rootScope, LoopBackAdminConfiguration) {
+  var User;
+  User = LoopBackAdminConfiguration.userModel;
   User.logout();
   $location.path('/login');
 }]);
@@ -1957,7 +1960,7 @@ angular.module('loopback-admin').controller('TableCtrl', ["$mdDialog", "$rootSco
   vm.query = {
     filter: null,
     limit: 10,
-    order: 'id',
+    orderPlain: 'id',
     orderDirection: 'DESC',
     page: 1
   };
