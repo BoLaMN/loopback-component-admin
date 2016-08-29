@@ -989,7 +989,7 @@ angular.module('loopback-admin').provider('PropertyTypeConfiguration', ["$inject
   propertyTypes = {};
   return {
     registerPropertyType: function(type, PropertyType) {
-      if (type === 'string') {
+      if (type === 'string' || type === 'objectid') {
         PropertyType = '';
       }
       return propertyTypes[type] = PropertyType + 'Property';
