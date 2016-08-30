@@ -82,7 +82,6 @@ angular.module 'loopback-admin'
   avatarAcceptedFormats: 'Accepted formats: png, jpeg.'
   avatarResizeExpl: 'Your avatar will be resized to 200x200 (px) if it\'s bigger then that.'
   view: 'View'
-  phone: 'Phone Number'
 
   # Responses
   genericError: 'something went wrong, please try again later.'
