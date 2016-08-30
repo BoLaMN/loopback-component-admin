@@ -13,11 +13,6 @@ angular.module 'loopback-admin'
           <span flex class="md-black-primary-hue-1 text">{{ :: child.name | modelToHuman }}</span>
         </md-button>
       </li>
-      <li>
-        <md-button layout="row" layout-align="space-between start" class="md-black-primary-default background" ui-sref="transfer">
-          <span flex class="md-black-primary-hue-1 text">transfer</span>
-        </md-button>
-      </li>
     </ul>'''
   controllerAs: 'ctrl'
   controller: ($state) ->

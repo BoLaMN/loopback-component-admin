@@ -137,7 +137,7 @@ angular.module('loopback-admin').directive('mdSidemenu', function() {
     scope: {
       menu: '='
     },
-    template: '<ul>\n  <li ng-repeat="child in ::menu">\n    <md-button layout="row" layout-align="space-between start" class="md-black-primary-default background" ng-click="ctrl.select(child.state, child.params)">\n      <md-icon ng-if="child.icon" md-font-set="material-icons" class="md-raised md-black-primary-hue-1 text">{{ :: child.icon }}</md-icon>\n      <span flex class="md-black-primary-hue-1 text">{{ :: child.name | modelToHuman }}</span>\n    </md-button>\n  </li>\n  <li>\n    <md-button layout="row" layout-align="space-between start" class="md-black-primary-default background" ui-sref="transfer">\n      <span flex class="md-black-primary-hue-1 text">transfer</span>\n    </md-button>\n  </li>\n</ul>',
+    template: '<ul>\n  <li ng-repeat="child in ::menu">\n    <md-button layout="row" layout-align="space-between start" class="md-black-primary-default background" ng-click="ctrl.select(child.state, child.params)">\n      <md-icon ng-if="child.icon" md-font-set="material-icons" class="md-raised md-black-primary-hue-1 text">{{ :: child.icon }}</md-icon>\n      <span flex class="md-black-primary-hue-1 text">{{ :: child.name | modelToHuman }}</span>\n    </md-button>\n  </li>\n</ul>',
     controllerAs: 'ctrl',
     controller: ["$state", function($state) {
       var vm;
@@ -558,6 +558,7 @@ angular.module('loopback-admin').filter('text', ["typedText", "$log", function(t
   avatarAcceptedFormats: 'Accepted formats: png, jpeg.',
   avatarResizeExpl: 'Your avatar will be resized to 200x200 (px) if it\'s bigger then that.',
   view: 'View',
+  phone: 'Phone Number',
   genericError: 'something went wrong, please try again later.',
   favoriteExists: 'You have already marked this photo as favorite.',
   passMatches: 'Password is correct.',
@@ -1859,153 +1860,6 @@ angular.module('loopback-admin').controller('registerController', ["$state", "Lo
     })["catch"](function(err) {
       vm.error = err;
     });
-  };
-}]);
-
-'use strict';
-
-angular.module('loopback-admin').config(["$stateProvider", function($stateProvider) {
-  return $stateProvider.state('transfer', {
-    url: '/transfer',
-    templateUrl: 'templates/routing/transfer.tpl.html',
-    controller: 'transferController',
-    controllerAs: 'transferController',
-    parent: 'browser',
-    resolve: {
-      User: ["config", function(config) {
-        return config.getModel('ZPUser');
-      }]
-    }
-  });
-}]);
-
-'use strict';
-
-angular.module('loopback-admin').controller('transferController', ["User", "$mdDialog", "$rootScope", "$log", function(User, $mdDialog, $rootScope, $log) {
-  var refreshRows, vm;
-  vm = this;
-  vm.deferred = null;
-  vm.filter = {
-    options: {
-      debounce: 500
-    }
-  };
-  vm.query = {
-    filter: null,
-    limit: 10,
-    orderPlain: 'id',
-    orderDirection: 'DESC',
-    page: 1
-  };
-  vm.model = User;
-  vm.resource = User.resource;
-  vm.rows = [];
-  refreshRows = function() {
-    var filter, page, params;
-    page = parseInt(vm.query.page, 10);
-    filter = {
-      include: vm.model.relationNames,
-      skip: (page - 1) * vm.query.limit,
-      limit: vm.query.limit,
-      order: vm.query.orderPlain + ' ' + vm.query.orderDirection
-    };
-    params = {
-      filter: filter
-    };
-    vm.rows = vm.resource.find(params, function(data, headers) {
-      return vm.count = parseInt(headers('x-total-count'));
-    });
-    vm.deferred = vm.rows.$promise;
-    return vm.deferred;
-  };
-  if (vm.resource && angular.isFunction(vm.resource.find)) {
-    refreshRows();
-  }
-  vm.showTransferModal = function(row, $event) {
-    return $mdDialog.show({
-      locals: {
-        row: row,
-        model: vm.model
-      },
-      templateUrl: "templates/modals/transfer.tpl.html",
-      targetEvent: $event,
-      clickOutsideToClose: true,
-      controller: 'transferModel',
-      controllerAs: 'modal'
-    });
-  };
-  vm.removeFilter = function() {
-    vm.filter.show = false;
-    vm.query.filter = '';
-    if (vm.filter.form.$dirty) {
-      vm.filter.form.$setPristine();
-      refreshRows();
-    }
-  };
-  vm.onOrderChange = function(order, $event) {
-    var direction, orderPlain;
-    $log.info('Scope Order: ' + vm.query.order);
-    $log.info('Order: ' + order);
-    direction = 'ASC';
-    if (order.charAt(0) === '-') {
-      direction = 'DESC';
-      orderPlain = order.slice(1);
-    }
-    vm.query.order = order;
-    vm.query.orderPlain = orderPlain || order;
-    vm.query.orderDirection = direction;
-    refreshRows();
-  };
-  vm.onPageChange = function(page, limit) {
-    $log.info('Scope Page: ' + vm.query.page + ' Scope Limit: ' + vm.query.limit);
-    $log.info('Page: ' + page + ' Limit: ' + limit);
-    vm.query.page = page;
-    vm.query.limit = limit;
-    refreshRows();
-  };
-  vm.onFilterChange = function(filter, $event) {
-    $log.info('Scope Filter: ' + vm.query.filter);
-    $log.info('Filter: ' + filter);
-    vm.query.page = 1;
-    refreshRows();
-  };
-}]);
-
-'use strict';
-
-angular.module('loopback-admin').controller('transferModel', ["$mdDialog", "$rootScope", "row", "model", function($mdDialog, $rootScope, row, model) {
-  var resource, vm;
-  resource = model.resource;
-  vm = this;
-  vm.form = {};
-  vm.model = model;
-  vm.properties = model.properties;
-  vm.row = row || new resource();
-  vm.transfer = {
-    amount: 0
-  };
-  vm.property = {
-    name: 'amount',
-    type: 'number',
-    getModel: function() {
-      return model;
-    }
-  };
-  vm.submit = function(data) {
-    var error, success;
-    success = function() {
-      $mdDialog.hide();
-      return $rootScope.showToast('transferdSuccessfully');
-    };
-    error = function(response) {
-      var message, ref, status;
-      ref = response.data.error, status = ref.status, message = ref.message;
-      vm.errorMessages = message;
-      return $rootScope.showToast('transferdFailed', message);
-    };
-    return model.resource['sendMoney']({
-      id: data.id
-    }, vm.transfer, success, error);
   };
 }]);
 

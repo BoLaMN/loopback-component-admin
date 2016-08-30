@@ -138,7 +138,7 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
     "\n" +
     "            <label>{{:: 'username' | text }}</label>\r" +
     "\n" +
-    "            <input class=\"username\" type=\"text\" ng-model=\"modal.auth.currentUserData.username\">\r" +
+    "            <input class=\"username\" type=\"text\" ng-model=\"modal.auth.currentUserData.nickname\">\r" +
     "\n" +
     "        </md-input-container>\r" +
     "\n" +
@@ -146,19 +146,9 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
     "\n" +
     "        <md-input-container>\r" +
     "\n" +
-    "            <label>{{:: 'firstName' | text }}</label>\r" +
+    "            <label>{{:: 'phone' | text }}</label>\r" +
     "\n" +
-    "            <input type=\"text\" ng-model=\"modal.auth.currentUserData.first_name\">\r" +
-    "\n" +
-    "        </md-input-container>\r" +
-    "\n" +
-    "\r" +
-    "\n" +
-    "        <md-input-container>\r" +
-    "\n" +
-    "            <label>{{:: 'lastName' | text }}</label>\r" +
-    "\n" +
-    "            <input type=\"text\" ng-model=\"modal.auth.currentUserData.last_name\">\r" +
+    "            <input type=\"text\" ng-model=\"modal.auth.currentUserData.phone\">\r" +
     "\n" +
     "        </md-input-container>\r" +
     "\n" +
@@ -360,42 +350,6 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
     "\n" +
     "                    <md-button type=\"submit\" class=\"md-primary md-raised\">\n" +
     "                        {{ modal.type }}\n" +
-    "                    </md-button>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </md-dialog-content>\n" +
-    "    </form>\n" +
-    "</md-dialog>"
-  );
-
-
-  $templateCache.put('templates/modals/transfer.tpl.html',
-    "<md-dialog class=\"md-modal md-modal-wide user-modal\">\n" +
-    "    <form ng-submit=\"modal.submit(modal.row)\" name=\"::modal.form\">\n" +
-    "        <md-toolbar>\n" +
-    "          <div class=\"md-toolbar-tools\">\n" +
-    "            <h2>{{ 'transfer ' + (modal.model.name | modelToHuman) + ' #' + modal.row[modal.model.identifier.name] }}</h2>\n" +
-    "\n" +
-    "            <span flex></span>\n" +
-    "\n" +
-    "            <md-button class=\"md-icon-button\" ng-click=\"$root.closeModal()\">\n" +
-    "              <md-icon aria-label=\"Close dialog\">close</md-icon>\n" +
-    "            </md-button>\n" +
-    "          </div>\n" +
-    "        </md-toolbar>\n" +
-    "\n" +
-    "        <md-dialog-content>\n" +
-    "            <div class=\"md-dialog-content\">\n" +
-    "                <div>\n" +
-    "                    <lb-property property=\"modal.property\" row=\"modal.transfer\" model=\"::modal.model\" form=\"::modal.form\" error-messages=\"modal.errorMessages\"></lb-property>\n" +
-    "                </div>\n" +
-    "                <div class=\"buttons\">\n" +
-    "                    <md-button type=\"button\" ng-click=\"$root.closeModal()\">\n" +
-    "                        {{:: 'cancel' | text }}\n" +
-    "                    </md-button>\n" +
-    "\n" +
-    "                    <md-button type=\"submit\" class=\"md-primary md-raised\">\n" +
-    "                        transfer\n" +
     "                    </md-button>\n" +
     "                </div>\n" +
     "            </div>\n" +
@@ -708,72 +662,6 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
     "</form>\n" +
     "\n" +
     "<p>{{:: 'alreadyHaveAccount' | text }} <a ui-sref=\"login\">{{:: 'logInHere' | text }}</a></p>"
-  );
-
-
-  $templateCache.put('templates/routing/transfer.tpl.html',
-    "<md-data-table-toolbar class=\"md-primary-default background\" >\n" +
-    "    <a ui-sref=\"transfer\">\n" +
-    "        <h2 class=\"md-title md-primary-default background\">transfer</h2>\n" +
-    "    </a>\n" +
-    "\n" +
-    "    <div flex></div>\n" +
-    "\n" +
-    "    <md-button class=\"md-icon-button\" ng-click=\"transferController.filter.show = true\">\n" +
-    "        <i class=\"material-icons md-dark\">search</i>\n" +
-    "    </md-button>\n" +
-    "</md-data-table-toolbar>\n" +
-    "\n" +
-    "<md-data-table-toolbar ng-show=\"transferController.filter.show\">\n" +
-    "    <i class=\"material-icons md-dark\">search</i>\n" +
-    "\n" +
-    "    <form flex name=\"transferController.filter.form\">\n" +
-    "        <!--<input type=\"text\" autofocus ng-model=\"transferController.query.filter\" ng-model-options=\"filter.options\" ng-change=\"onFilterChange(query.filter, $event)\" placeholder=\"search\">-->\n" +
-    "    </form>\n" +
-    "\n" +
-    "    <md-button class=\"md-icon-button\" ng-click=\"transferController.removeFilter()\">\n" +
-    "        <i class=\"material-icons md-dark\">close</i>\n" +
-    "    </md-button>\n" +
-    "</md-data-table-toolbar>\n" +
-    "\n" +
-    "<md-data-table-container>\n" +
-    "    <table md-data-table md-progress=\"transferController.deferred\" class=\"md-primary\" ng-show=\"transferController.count\">\n" +
-    "        <thead md-order=\"transferController.query.order\" md-trigger=\"transferController.onOrderChange\">\n" +
-    "            <tr>\n" +
-    "                <th ng-repeat=\"property in transferController.model.properties track by $index\" name=\"{{:: property.label | modelToHuman }}\" order-by=\"{{:: property.name }}\"></th>\n" +
-    "                <th class=\"loopback-admin-column-actions\">&nbsp;</th>\n" +
-    "            </tr>\n" +
-    "        </thead>\n" +
-    "\n" +
-    "        <tbody>\n" +
-    "            <tr ng-repeat=\"row in transferController.rows | orderBy: transferController.query.order | limitTo: transferController.query.limit track by $index\">\n" +
-    "                <td ng-repeat=\"property in transferController.model.properties track by $index\">\n" +
-    "                    <lb-column property=\"::property\" row=\"row\" rows=\"transferController.rows\" model=\"::transferController.model\"></lb-column>\n" +
-    "                </td>\n" +
-    "                <td class=\"md-table-column-actions\">\n" +
-    "                    <i class=\"material-icons md-dark\" ng-click=\"transferController.showTransferModal(row, $event); $event.stopPropagation()\">mode_edit</i>\n" +
-    "                    <md-tooltip>transfer</md-tooltip>\n" +
-    "                </td>\n" +
-    "            </tr>\n" +
-    "        </tbody>\n" +
-    "\n" +
-    "        <table md-data-table class=\"md-primary\" ng-hide=\"transferController.count\">\n" +
-    "            <thead md-order=\"transferController.query.order\">\n" +
-    "                <tr>\n" +
-    "                    <th ng-repeat=\"property in transferController.model.properties track by $index\" name=\"{{:: property.label }}\" order-by=\"{{:: property.name }}\"></th>\n" +
-    "                    <th class=\"loopback-admin-column-actions\">&nbsp;</th>\n" +
-    "                </tr>\n" +
-    "            </thead>\n" +
-    "            <tbody ng-if=\"!transferController.count\">\n" +
-    "                <tr>\n" +
-    "                    <td colspan=\"{{ transferController.model.properties.length + 1 }}\">No records found.</td>\n" +
-    "                </tr>\n" +
-    "            </tbody>\n" +
-    "        </table>\n" +
-    "    </table>\n" +
-    "</md-data-table-container>\n" +
-    "\n" +
-    "<md-data-table-pagination md-limit=\"transferController.query.limit\" md-page=\"transferController.query.page\" md-total=\"{{transferController.count}}\" md-trigger=\"transferController.onPageChange\"></md-data-table-pagination>"
   );
 
 
