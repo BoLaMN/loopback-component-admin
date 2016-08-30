@@ -6,3 +6,5 @@ dist/public/js/loopback-admin.config.js
 dist/public/config.json
 
 dist/package.json
+
+node_modules

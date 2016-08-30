@@ -1,0 +1,62 @@
+<md-data-table-toolbar class="md-primary-default background" >
+    <a ui-sref="transfer">
+        <h2 class="md-title md-primary-default background">transfer</h2>
+    </a>
+
+    <div flex></div>
+
+    <md-button class="md-icon-button" ng-click="transferController.filter.show = true">
+        <i class="material-icons md-dark">search</i>
+    </md-button>
+</md-data-table-toolbar>
+
+<md-data-table-toolbar ng-show="transferController.filter.show">
+    <i class="material-icons md-dark">search</i>
+
+    <form flex name="transferController.filter.form">
+        <!--<input type="text" autofocus ng-model="transferController.query.filter" ng-model-options="filter.options" ng-change="onFilterChange(query.filter, $event)" placeholder="search">-->
+    </form>
+
+    <md-button class="md-icon-button" ng-click="transferController.removeFilter()">
+        <i class="material-icons md-dark">close</i>
+    </md-button>
+</md-data-table-toolbar>
+
+<md-data-table-container>
+    <table md-data-table md-progress="transferController.deferred" class="md-primary" ng-show="transferController.count">
+        <thead md-order="transferController.query.order" md-trigger="transferController.onOrderChange">
+            <tr>
+                <th ng-repeat="property in transferController.model.properties track by $index" name="{{:: property.label | modelToHuman }}" order-by="{{:: property.name }}"></th>
+                <th class="loopback-admin-column-actions">&nbsp;</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr ng-repeat="row in transferController.rows | orderBy: transferController.query.order | limitTo: transferController.query.limit track by $index">
+                <td ng-repeat="property in transferController.model.properties track by $index">
+                    <lb-column property="::property" row="row" rows="transferController.rows" model="::transferController.model"></lb-column>
+                </td>
+                <td class="md-table-column-actions">
+                    <i class="material-icons md-dark" ng-click="transferController.showTransferModal(row, $event); $event.stopPropagation()">mode_edit</i>
+                    <md-tooltip>transfer</md-tooltip>
+                </td>
+            </tr>
+        </tbody>
+
+        <table md-data-table class="md-primary" ng-hide="transferController.count">
+            <thead md-order="transferController.query.order">
+                <tr>
+                    <th ng-repeat="property in transferController.model.properties track by $index" name="{{:: property.label }}" order-by="{{:: property.name }}"></th>
+                    <th class="loopback-admin-column-actions">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody ng-if="!transferController.count">
+                <tr>
+                    <td colspan="{{ transferController.model.properties.length + 1 }}">No records found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </table>
+</md-data-table-container>
+
+<md-data-table-pagination md-limit="transferController.query.limit" md-page="transferController.query.page" md-total="{{transferController.count}}" md-trigger="transferController.onPageChange"></md-data-table-pagination>
