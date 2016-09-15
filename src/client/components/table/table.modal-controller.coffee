@@ -4,7 +4,7 @@ angular.module 'loopback-admin'
 
 .controller 'RowDataModel', ($mdDialog, $rootScope, type, row, rows, model) ->
   resource = model.resource
-  fn = if type is 'edit' then 'save' else 'create'
+  fn = if type is 'edit' then 'prototype$updateAttributes' else 'create'
 
   vm = this
 
