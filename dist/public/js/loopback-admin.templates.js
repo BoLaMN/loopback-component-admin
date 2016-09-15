@@ -138,7 +138,7 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
     "\n" +
     "            <label>{{:: 'username' | text }}</label>\r" +
     "\n" +
-    "            <input class=\"username\" type=\"text\" ng-model=\"modal.auth.currentUserData.nickname\">\r" +
+    "            <input class=\"username\" type=\"text\" ng-model=\"modal.auth.currentUserData.username\">\r" +
     "\n" +
     "        </md-input-container>\r" +
     "\n" +
@@ -146,9 +146,19 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
     "\n" +
     "        <md-input-container>\r" +
     "\n" +
-    "            <label>{{:: 'phone' | text }}</label>\r" +
+    "            <label>{{:: 'firstName' | text }}</label>\r" +
     "\n" +
-    "            <input type=\"text\" ng-model=\"modal.auth.currentUserData.phone\">\r" +
+    "            <input type=\"text\" ng-model=\"modal.auth.currentUserData.first_name\">\r" +
+    "\n" +
+    "        </md-input-container>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "        <md-input-container>\r" +
+    "\n" +
+    "            <label>{{:: 'lastName' | text }}</label>\r" +
+    "\n" +
+    "            <input type=\"text\" ng-model=\"modal.auth.currentUserData.last_name\">\r" +
     "\n" +
     "        </md-input-container>\r" +
     "\n" +

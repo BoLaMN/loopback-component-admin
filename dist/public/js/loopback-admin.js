@@ -558,7 +558,6 @@ angular.module('loopback-admin').filter('text', ["typedText", "$log", function(t
   avatarAcceptedFormats: 'Accepted formats: png, jpeg.',
   avatarResizeExpl: 'Your avatar will be resized to 200x200 (px) if it\'s bigger then that.',
   view: 'View',
-  phone: 'Phone Number',
   genericError: 'something went wrong, please try again later.',
   favoriteExists: 'You have already marked this photo as favorite.',
   passMatches: 'Password is correct.',
@@ -2085,7 +2084,7 @@ angular.module('loopback-admin').directive('cmsTable', function() {
 angular.module('loopback-admin').controller('RowDataModel', ["$mdDialog", "$rootScope", "type", "row", "rows", "model", function($mdDialog, $rootScope, type, row, rows, model) {
   var fn, resource, vm;
   resource = model.resource;
-  fn = type === 'edit' ? 'save' : 'create';
+  fn = type === 'edit' ? 'prototype$updateAttributes' : 'create';
   vm = this;
   vm.form = {};
   vm.model = model;
