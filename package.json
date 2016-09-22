@@ -11,7 +11,10 @@
     "url": "https://github.com/BoLaMN/loopback-component-admin"
   },
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "npm run install && grunt",
+    "postinstall": "npm run build"
+  },
   "devDependencies": {
     "coffee-script": "1.10.0",
     "grunt": "^0.4.5",
@@ -25,7 +28,6 @@
     "grunt-ng-annotate": "^1.0.1",
     "load-grunt-tasks": "^3.2.0",
     "grunt-contrib-less": "^1.1.0",
-    "grunt-contrib-watch": "^0.6.1",
     "grunt-express": "^1.4.1",
     "grunt-open": "^0.2.3",
     "grunt-parallel": "^0.4.1"
