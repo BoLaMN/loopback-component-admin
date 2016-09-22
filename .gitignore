@@ -1,3 +1,5 @@
+nodes_modules/
+dist/
 
 dist/public/js/loopback-admin.resources.js
 
