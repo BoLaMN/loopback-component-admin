@@ -31,6 +31,7 @@
     "grunt-parallel": "^0.4.1"
   },
   "dependencies": {
+    "lodash": "^4.16.3",
     "loopback": "^2.26.0",
     "loopback-sdk-angular": "^1.6.0"
   }
