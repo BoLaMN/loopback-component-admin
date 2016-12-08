@@ -29,6 +29,16 @@ module.exports = function (grunt) {
                 dest: normalize(__dirname + "/dist"),
                 expand: true
             },
+            component: {
+              files: [
+                  {
+                      expand: true,
+                      cwd: 'src/component/',
+                      src: ['*.js'],
+                      dest: 'dist'
+                  }
+              ]
+            },
             main: {
                 files: [
                     {
@@ -129,6 +139,6 @@ module.exports = function (grunt) {
     });
     
     grunt.registerTask('server', ['default', 'express', 'open', 'watch']);
-    grunt.registerTask('default', ['clean', 'concat', 'ngtemplates', 'ngAnnotate', 'copy:dist', 'copy:main', 'less']);
+    grunt.registerTask('default', ['clean', 'concat', 'ngtemplates', 'ngAnnotate', 'copy:dist', 'copy:main', 'copy:component', 'less']);
     return grunt.registerTask('dev', ['default', 'watch']);
 };
