@@ -1830,7 +1830,11 @@ angular.module('loopback-admin').controller('loginController', ["$state", "$root
         var request;
         request = User.login(credentials);
         return request.$promise.then(function (data) {
-            $state.go('dashboard');
+            if (data.user.role === 'admin') {
+                $state.go('dashboard');
+            } else {
+                User.logout();
+            }
         })["catch"](function (err) {
             vm.error = err;
         });
