@@ -9,6 +9,11 @@ module.exports = function (grunt) {
             dist: normalize(__dirname + "/dist")
         },
         concat: {
+            main: {
+                src: ['src/client/app.js', 'src/client/components/*.js', 'src/client/components/**/**.js'],
+                dest: 'dist/public/js/loopback-admin.js'
+
+            },
             js: {
                 src: ['src/client/vendor/js/**/*.js', 'src/client/vendor/js/**'],
                 dest: 'dist/public/js/loopback-admin.vendor.js'
@@ -40,28 +45,6 @@ module.exports = function (grunt) {
                 src: ['<%= config.dist %>/*.js', '<%= config.dist %>/public/js/*.js', '<%= config.dist %>/public/{css,images,index.html,!config.json}', '!<%= config.dist %>/public/js/{loopback-admin.resources,loopback-admin.config}.js']
             }
         },
-        coffee: {
-            app: {
-                options: {
-                    bare: true,
-                    join: true
-                },
-                files: {
-                    'dist/public/js/loopback-admin.js': ['src/client/app.coffee', 'src/client/components/*.coffee', 'src/client/components/**/**.coffee']
-                }
-            },
-            main: {
-                options: {
-                    bare: true,
-                    join: true
-                },
-                expand: true,
-                cwd: 'src/component',
-                src: ['**/*.coffee'],
-                dest: 'dist/',
-                ext: '.js'
-            }
-        },
         ngtemplates: {
             material: {
                 options: {
@@ -84,13 +67,6 @@ module.exports = function (grunt) {
             ngtemplates: {
                 files: ['src/client/**/*/**.html'],
                 tasks: ['ngtemplates', 'concat'],
-                options: {
-                    livereload: true
-                }
-            },
-            coffee: {
-                files: ['src/client/*.coffee', 'src/client/**/**.coffee'],
-                tasks: ['coffee', 'ngAnnotate', 'ngtemplates', 'concat'],
                 options: {
                     livereload: true
                 }
@@ -147,10 +123,12 @@ module.exports = function (grunt) {
             }
         }
     });
+    
     grunt.event.on('watch', function (action, filepath, target) {
         grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
     });
+    
     grunt.registerTask('server', ['default', 'express', 'open', 'watch']);
-    grunt.registerTask('default', ['clean', 'coffee', 'ngtemplates', 'ngAnnotate', 'concat', 'copy:dist', 'copy:main', 'less']);
+    grunt.registerTask('default', ['clean', 'concat:main', 'ngtemplates', 'ngAnnotate', 'concat:js', 'concat:css', 'copy:dist', 'copy:main', 'less']);
     return grunt.registerTask('dev', ['default', 'watch']);
 };
