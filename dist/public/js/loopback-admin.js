@@ -1723,6 +1723,29 @@ angular.module('loopback-admin').controller('BrowserController', ["$scope", "$st
 
 'use strict';
 angular.module('loopback-admin').config(["$stateProvider", function ($stateProvider) {
+    $stateProvider.state('ban', {
+        url: '/baneados',
+        parent: 'browser',
+        controller: 'BanController',
+        controllerAs: 'banController',
+        templateUrl: 'templates/routing/ban.tpl.html',
+        resolve: {
+            model: ["config", function (config) {
+                return config.getModel('BanReport');
+            }]
+        }
+    });
+}]);
+
+'use strict';
+angular.module('loopback-admin').controller('ListController', ["model", function (model) {
+    var vm;
+    vm = this;
+    vm.model = model;
+}]);
+
+'use strict';
+angular.module('loopback-admin').config(["$stateProvider", function ($stateProvider) {
     return $stateProvider.state('dashboard', {
         parent: 'browser',
         url: '/dashboard',
