@@ -47,6 +47,7 @@ jspm_packages
 .yarn-integrity
 
 .idea
+.DS_Store
 
 # Dist
 dist

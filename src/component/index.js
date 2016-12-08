@@ -1,113 +1,106 @@
-ANNOTATED SOURCE
-CoffeeScript is a little language that compiles into JavaScript.Underneath that awkward Java - esque patina, JavaScript has always had a gorgeous heart.CoffeeScript is an attempt to expose the good parts of JavaScript in a simple way.
+'use strict';
+var STATIC_ROOT, attachXTotalCount, cors, createUser, defaults, fs, generateAdminSpec, mountAdmin, path, routes, setupCors, url, writeConfig;
 
-      The golden rule of CoffeeScript is:
-“
-It
-’
-s just JavaScript
-”.
-The code compiles one - to - one into the equivalent JS, and there is no
-interpretation at runtime.You can use any existing JavaScript library seamlessly from CoffeeScript (and vice - versa).The compiled output is readable, pretty - printed, and tends to run as fast or faster than the equivalent handwritten JavaScript.
+cors = require('cors');
 
-    The CoffeeScript compiler goes to great lengths to generate output JavaScript that runs in every JavaScript runtime, but there are exceptions.Use generator functions, for
-…
-from
-,
-or
-tagged template literals only if you know that your target runtimes can support them.If you use modules, you will need to use an additional tool to resolve them.
+path = require('path');
 
-Latest Version: 1.12
-.
-0
+url = require('url');
 
-npm install -g coffee - script
-Overview
+fs = require('fs');
 
-CoffeeScript on
-the left, compiled JavaScript output on
-the right.
+defaults = require('lodash').defaults;
 
-# Assignment:
-number = 42
-opposite = true
+createUser = require('./create-user');
 
-# Conditions:
-number = -42 if opposite
+generateAdminSpec = require('./admin-spec');
 
-# Functions:
-square = (x) -> x * x
+STATIC_ROOT = path.join(__dirname, 'public');
 
-# Arrays:
-list = [1, 2, 3, 4, 5]
-
-# Objects:
-math =
-  root: Math.sqrt
-  square: square
-  cube: (x) -> x * square x
-
-# Splats:
-race = (winner, runners...) ->
-  print winner, runners
-
-# Existence:
-alert "I knew it!" if elvis?
-
-# Array comprehensions:
-cubes = (math.cube num for num in list)
-var cubes, list, math, num, number, opposite, race, square,
-  slice = [].slice;
-
-number = 42;
-
-opposite = true;
-
-if (opposite) {
-number = -42;
-}
-
-square = function(x) {
-return x * x;
+attachXTotalCount = function (loopbackApplication) {
+    var remotes;
+    remotes = loopbackApplication.remotes();
+    remotes.after('*.find', function (ctx, next) {
+        var filter;
+        filter = void 0;
+        if (ctx.args && ctx.args.filter) {
+            if (typeof ctx.args.filter === 'object') {
+                filter = ctx.args.filter.where;
+            } else {
+                filter = JSON.parse(ctx.args.filter).where;
+            }
+        }
+        if (!ctx.res._headerSent) {
+            this.count(filter, function (err, count) {
+                ctx.res.set('Access-Control-Expose-Headers', 'X-Total-Count');
+                ctx.res.set('X-Total-Count', count);
+                next();
+            });
+        } else {
+            next();
+        }
+    });
 };
 
-list = [1, 2, 3, 4, 5];
-
-math = {
-  root: Math.sqrt,
-  square: square,
-  cube: function(x) {
-return x * square(x);
-}
+writeConfig = function (config) {
+    var configJS, configJSON;
+    configJSON = JSON.stringify(config);
+    configJS = "angular.module('loopback-admin')\n\n.config([\"LoopBackAdminConfigurationProvider\", function(LoopBackAdminConfigurationProvider) {\n  LoopBackAdminConfigurationProvider.setConfig(" + configJSON + ");\n}]);";
+    fs.writeFileSync(path.join(__dirname, 'public/js/loopback-admin.config.js'), configJS, 'utf-8');
 };
 
-race = function() {
-  var runners, winner;
-winner = arguments[0]
-,
-runners = 2 <= arguments.length ? slice.call(arguments, 1)
-:
-[];
-return print(winner, runners);
+mountAdmin = function (loopbackApplication, adminApp, opts) {
+    return generateAdminSpec(loopbackApplication, opts, function (adminObject) {
+        var remotes, resourcePath;
+        resourcePath = opts.resourcePath;
+        if (resourcePath[0] !== '/') {
+            resourcePath = '/' + resourcePath;
+        }
+        remotes = loopbackApplication.remotes();
+        setupCors(adminApp, remotes);
+        adminApp.get(resourcePath, function (req, res) {
+            res.status(200).send(adminObject);
+        });
+    });
 };
 
-if (typeof elvis != = "undefined" && elvis != = null) {
-  alert("I knew it!");
-}
+setupCors = function (adminApp, remotes) {
+    var corsOptions;
+    corsOptions = remotes.options && remotes.options.cors || {
+            origin: true,
+            credentials: true
+        };
+    adminApp.use(cors(corsOptions));
+};
 
-cubes = (function() {
-  var i, len, results;
-  results = [];
-  for (i = 0
-,
-len = list.length;
-i < len;
-i++
-)
-{
-num = list[i];
-results.push(math.cube(num));
-}
-return results;
-})
-();
+routes = function (loopbackApplication, options) {
+    var loopback, router;
+    loopback = loopbackApplication.loopback;
+    options = defaults({}, options, {
+        resourcePath: 'config.json',
+        mountPath: '/admin',
+        userModel: 'User',
+        userLoginField: 'username',
+        apiInfo: loopbackApplication.get('apiInfo') || {}
+    });
+    router = new loopback.Router();
+    attachXTotalCount(loopbackApplication);
+    mountAdmin(loopbackApplication, router, options);
+    writeConfig(options);
+    router.use(loopback["static"](STATIC_ROOT));
+    return router;
+};
+
+module.exports = function (loopbackApplication, options) {
+    options = defaults({}, options, {
+        mountPath: '/admin'
+    });
+    loopbackApplication.use(options.mountPath, routes(loopbackApplication, options));
+    loopbackApplication.set('loopback-component-admin', options);
+    loopbackApplication.once('started', function () {
+        var adminPath, baseUrl;
+        baseUrl = loopbackApplication.get('url').replace(/\/$/, '');
+        adminPath = options.mountPath || options.route;
+        return console.log('Browse your Admin UI at %s%s', baseUrl, adminPath);
+    });
+};
