@@ -129,6 +129,6 @@ module.exports = function (grunt) {
     });
     
     grunt.registerTask('server', ['default', 'express', 'open', 'watch']);
-    grunt.registerTask('default', ['clean', 'concat:main', 'ngtemplates', 'ngAnnotate', 'concat:js', 'concat:css', 'copy:dist', 'copy:main', 'less']);
+    grunt.registerTask('default', ['clean', 'concat', 'ngtemplates', 'ngAnnotate', 'copy:dist', 'copy:main', 'less']);
     return grunt.registerTask('dev', ['default', 'watch']);
 };
