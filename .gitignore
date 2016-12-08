@@ -48,10 +48,5 @@ jspm_packages
 
 .idea
 
-dist/public/js/loopback-admin.resources.js
-
-dist/public/js/loopback-admin.config.js
-
-dist/public/config.json
-
-dist/package.json
+# Dist
+dist
