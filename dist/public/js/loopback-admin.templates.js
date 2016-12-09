@@ -486,6 +486,17 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
   );
 
 
+  $templateCache.put('templates/routing/ban.tpl.html',
+    "<div class=\"content-margin\">\n" +
+    "  <cms-table flex\n" +
+    "  \tname=\"{{ ::listController.view.name }}\"\n" +
+    "  \tproperties=\"::listController.properties\"\n" +
+    "  \tmodel=\"::listController.model\">\n" +
+    "  </cms-table>\n" +
+    "</div>"
+  );
+
+
   $templateCache.put('templates/routing/browser.tpl.html',
     "<md-sidenav flex flex-order=\"1\" md-component-id=\"left\" md-is-locked-open=\"$mdMedia('gt-md')\" layout=\"column\" style=\"float: left\" id=\"left-col\" class=\"md-black-primary-default background\">\n" +
     "    <cms-current-user></cms-current-user>\n" +
@@ -504,6 +515,8 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
     "<cms-toolbar title=\"'Dashboard'\" layout=\"row\"></cms-toolbar>\n" +
     "\n" +
     "<div class='md-padding' layout=\"row\" layout-wrap>\n" +
+    "    <!--<a ui-sref=\"ban\">Baneados</a>-->\n" +
+    "    <!--\n" +
     "    <div flex=\"50\" ng-repeat=\"model in dashboardController.models\">\n" +
     "        <md-card>\n" +
     "            <md-card-content>\n" +
@@ -515,6 +528,7 @@ angular.module('loopback-admin.theme', []).run(['$templateCache', function($temp
     "            </md-card-content>\n" +
     "        </md-card>\n" +
     "    </div>\n" +
+    "    -->\n" +
     "</div>\n"
   );
 
